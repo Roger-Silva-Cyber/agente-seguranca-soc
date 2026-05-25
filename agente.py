@@ -9,6 +9,7 @@ import config
 import detector_tokens
 import detector_processos
 import detector_ameacas
+import mitigacao
 
 cliente = Groq(api_key=config.GROQ_API_KEY)
 eventos_do_dia = []
@@ -121,7 +122,7 @@ def verificar_arquivos():
                     pass
     return alertas_arquivos
 
-def analisar_com_ia(dados_sistema, alertas_sistema, alertas_arquivos, alertas_processos, alertas_ameacas):
+def analisar_com_ia(dados_sistema, todos_alertas, contexto_mitre):
     prompt = f"""
 Você é um analista de segurança SOC Tier 1 experiente.
 Analise os dados abaixo e responda em português de forma direta.
@@ -133,10 +134,10 @@ DADOS DO SISTEMA:
 - Total de conexões: {dados_sistema['total_conexoes']}
 - Conexões externas: {dados_sistema['conexoes_externas'][:5]}
 
-ALERTAS DO SISTEMA: {alertas_sistema if alertas_sistema else 'Nenhum'}
-ALERTAS DE ARQUIVOS: {alertas_arquivos[:10] if alertas_arquivos else 'Nenhum'}
-ALERTAS DE PROCESSOS: {alertas_processos[:10] if alertas_processos else 'Nenhum'}
-ALERTAS DE AMEAÇAS: {alertas_ameacas[:10] if alertas_ameacas else 'Nenhum'}
+ALERTAS DETECTADOS: {todos_alertas[:15]}
+
+CONTEXTO MITRE ATT&CK:
+{contexto_mitre if contexto_mitre else 'Nenhuma técnica identificada'}
 
 Responda exatamente neste formato:
 RISCO: [BAIXO/MÉDIO/ALTO/CRÍTICO]
@@ -146,9 +147,20 @@ AÇÃO: [o que fazer agora em 1 linha]
     resposta = cliente.chat.completions.create(
         model=config.MODELO,
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=300
+        max_tokens=400
     )
     return resposta.choices[0].message.content
+
+def extrair_risco(analise):
+    for linha in analise.split('\n'):
+        if 'RISCO:' in linha:
+            if 'CRÍTICO' in linha:
+                return 'CRÍTICO'
+            elif 'ALTO' in linha:
+                return 'ALTO'
+            elif 'MÉDIO' in linha:
+                return 'MÉDIO'
+    return 'BAIXO'
 
 def verificar_sistema():
     print(f"\n[{datetime.datetime.now().strftime('%H:%M:%S')}] Verificando sistema...")
@@ -161,36 +173,68 @@ def verificar_sistema():
         alertas_exfil = detector_tokens.verificar_exfiltracao(alertas_tokens, dados['conexoes_externas'])
         alertas_ameacas = detector_ameacas.verificar_ips_maliciosos(dados['conexoes_externas'])
         todos_alertas = alertas_sistema + alertas_arquivos + alertas_tokens + alertas_processos + alertas_exfil + alertas_ameacas
+
         if todos_alertas:
             print(f"⚠️  ALERTAS DETECTADOS:")
             for a in todos_alertas:
                 print(f"   → {a}")
+
+            contexto_mitre = mitigacao.formatar_contexto_mitre(todos_alertas)
+            if contexto_mitre:
+                print(f"\n📚 CONTEXTO MITRE ATT&CK:{contexto_mitre}")
+
             try:
-                analise = analisar_com_ia(dados, alertas_sistema, alertas_arquivos, alertas_processos, alertas_ameacas)
+                analise = analisar_com_ia(dados, todos_alertas, contexto_mitre)
                 print(f"\n🤖 ANÁLISE IA:\n{analise}")
-                eventos_do_dia.append({'hora': dados['hora'], 'alertas': todos_alertas, 'analise': analise})
+
+                risco = extrair_risco(analise)
+                acoes = mitigacao.agir_automaticamente(todos_alertas, risco)
+
+                if acoes:
+                    print(f"\n⚡ AÇÕES AUTOMÁTICAS EXECUTADAS:")
+                    for acao in acoes:
+                        print(f"   → {acao}")
+
+                eventos_do_dia.append({
+                    'hora': dados['hora'],
+                    'alertas': todos_alertas,
+                    'analise': analise,
+                    'risco': risco,
+                    'acoes': acoes
+                })
+
             except Exception as e:
                 print(f"⚠️  IA indisponível: {e}")
-                eventos_do_dia.append({'hora': dados['hora'], 'alertas': todos_alertas, 'analise': 'IA indisponível'})
+                eventos_do_dia.append({
+                    'hora': dados['hora'],
+                    'alertas': todos_alertas,
+                    'analise': 'IA indisponível',
+                    'risco': 'DESCONHECIDO',
+                    'acoes': []
+                })
         else:
             print(f"✅ Normal — CPU: {dados['cpu']}% | RAM: {dados['ram']}% | Conexões: {dados['total_conexoes']} | Ameaças: OK")
+
     except Exception as e:
         print(f"❌ Erro: {e}")
 
 def gerar_relatorio():
     agora = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-    resumo = f"{len(eventos_do_dia)} evento(s) suspeito(s)." if eventos_do_dia else "Nenhum evento suspeito hoje."
+    criticos = [e for e in eventos_do_dia if e.get('risco') in ['ALTO', 'CRÍTICO']]
+    resumo = f"{len(eventos_do_dia)} evento(s) — {len(criticos)} crítico(s)." if eventos_do_dia else "Nenhum evento suspeito hoje."
     relatorio = f"\n{'='*50}\nRELATÓRIO DIÁRIO DE SEGURANÇA\nData: {agora}\n{'='*50}\nRESUMO: {resumo}\n\nEVENTOS:\n"
     for e in eventos_do_dia:
-        relatorio += f"\n[{e['hora']}]\nAlertas: {e['alertas']}\nAnálise: {e['analise']}\n{'-'*30}\n"
+        acoes_str = '\n'.join(e.get('acoes', [])) if e.get('acoes') else 'Nenhuma ação automática'
+        relatorio += f"\n[{e['hora']}] RISCO: {e.get('risco','?')}\nAlertas: {e['alertas']}\nAnálise: {e['analise']}\nAções: {acoes_str}\n{'-'*30}\n"
     with open(config.RELATORIO_PATH, 'a') as f:
         f.write(relatorio)
     print(relatorio)
     eventos_do_dia.clear()
 
-print("🛡️  Agente de Segurança iniciado!")
+print("🛡️  Agente de Segurança SOC iniciado!")
 print(f"Diretórios monitorados: {len(config.DIRETORIOS_MONITORADOS)}")
 print("Verificação a cada 1 minuto | Relatório às 23:59")
+print("Mitigação automática: ATIVA para riscos ALTO e CRÍTICO")
 print("CTRL+C para parar\n")
 
 construir_baseline()
