@@ -10,6 +10,7 @@ import detector_tokens
 import detector_processos
 import detector_ameacas
 import mitigacao
+import dashboard
 
 cliente = Groq(api_key=config.GROQ_API_KEY)
 eventos_do_dia = []
@@ -79,6 +80,7 @@ def construir_baseline():
                     }
                 except:
                     pass
+    dashboard.baseline_count = len(baseline_arquivos)
     print(f"✅ Baseline construído: {len(baseline_arquivos)} arquivos monitorados")
 
 def verificar_arquivos():
@@ -173,48 +175,44 @@ def verificar_sistema():
         alertas_exfil = detector_tokens.verificar_exfiltracao(alertas_tokens, dados['conexoes_externas'])
         alertas_ameacas = detector_ameacas.verificar_ips_maliciosos(dados['conexoes_externas'])
         todos_alertas = alertas_sistema + alertas_arquivos + alertas_tokens + alertas_processos + alertas_exfil + alertas_ameacas
-
         if todos_alertas:
             print(f"⚠️  ALERTAS DETECTADOS:")
             for a in todos_alertas:
                 print(f"   → {a}")
-
             contexto_mitre = mitigacao.formatar_contexto_mitre(todos_alertas)
             if contexto_mitre:
                 print(f"\n📚 CONTEXTO MITRE ATT&CK:{contexto_mitre}")
-
             try:
                 analise = analisar_com_ia(dados, todos_alertas, contexto_mitre)
                 print(f"\n🤖 ANÁLISE IA:\n{analise}")
-
                 risco = extrair_risco(analise)
                 acoes = mitigacao.agir_automaticamente(todos_alertas, risco)
-
                 if acoes:
-                    print(f"\n⚡ AÇÕES AUTOMÁTICAS EXECUTADAS:")
+                    print(f"\n⚡ AÇÕES AUTOMÁTICAS:")
                     for acao in acoes:
                         print(f"   → {acao}")
-
-                eventos_do_dia.append({
+                evento = {
                     'hora': dados['hora'],
                     'alertas': todos_alertas,
                     'analise': analise,
                     'risco': risco,
                     'acoes': acoes
-                })
-
+                }
+                eventos_do_dia.append(evento)
+                dashboard.eventos_compartilhados.append(evento)
             except Exception as e:
                 print(f"⚠️  IA indisponível: {e}")
-                eventos_do_dia.append({
+                evento = {
                     'hora': dados['hora'],
                     'alertas': todos_alertas,
                     'analise': 'IA indisponível',
                     'risco': 'DESCONHECIDO',
                     'acoes': []
-                })
+                }
+                eventos_do_dia.append(evento)
+                dashboard.eventos_compartilhados.append(evento)
         else:
             print(f"✅ Normal — CPU: {dados['cpu']}% | RAM: {dados['ram']}% | Conexões: {dados['total_conexoes']} | Ameaças: OK")
-
     except Exception as e:
         print(f"❌ Erro: {e}")
 
@@ -230,11 +228,13 @@ def gerar_relatorio():
         f.write(relatorio)
     print(relatorio)
     eventos_do_dia.clear()
+    dashboard.eventos_compartilhados.clear()
 
 print("🛡️  Agente de Segurança SOC iniciado!")
 print(f"Diretórios monitorados: {len(config.DIRETORIOS_MONITORADOS)}")
 print("Verificação a cada 1 minuto | Relatório às 23:59")
 print("Mitigação automática: ATIVA para riscos ALTO e CRÍTICO")
+print("Dashboard: http://localhost:5000")
 print("CTRL+C para parar\n")
 
 construir_baseline()
