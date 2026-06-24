@@ -5,3 +5,12 @@ __pycache__/
 relatorio_diario.txt
 *.swp
 agente
+
+# Variáveis de ambiente — NUNCA commitar
+.env
+*.env
+soc-central/.env
+
+# Locks do Obsidian
+.locks/
+

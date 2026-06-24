@@ -2,3 +2,9 @@ groq
 psutil
 requests
 schedule
+python-dotenv
+flask
+flask-httpauth
+bcrypt
+watchdog
+tqdm

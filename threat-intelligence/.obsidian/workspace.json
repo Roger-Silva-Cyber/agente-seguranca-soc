@@ -1,0 +1,217 @@
+{
+  "main": {
+    "id": "814834df30d57fc4",
+    "type": "split",
+    "children": [
+      {
+        "id": "92a01225d2d8b1f0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b40437ef2cf73d3c",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2f9916dd4e79b35b",
+    "type": "split",
+    "children": [
+      {
+        "id": "9ac1052e929709d4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4af7d049a1c5fa29",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "a64cf609dd43a325",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "f54fda11bc7b3dc3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ff947ddb902e119d",
+    "type": "split",
+    "children": [
+      {
+        "id": "fdbe812d8f7497e7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "94d628c522fa3d26",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Malwares/“Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos para “Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A)"
+            }
+          },
+          {
+            "id": "24d3401e784dd350",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Malwares/“Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A).md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída para “Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A)"
+            }
+          },
+          {
+            "id": "f58b3cf512cae311",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "e4a6ce4419a57ce8",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "b1c50d9f58f5b268",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Malwares/“Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A).md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário de “Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "graph:Abrir visualização em gráfico": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "b40437ef2cf73d3c",
+  "lastOpenFiles": [
+    "Malwares/Credit_disable_duck_[title_n0paste,_show_paste_no_problems.md",
+    "Campanhas/“Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (Zeppelin Bloat-A).md",
+    "Campanhas/InQuest - 01-03-2025.md",
+    "Campanhas/ETIC_Cybersecurity_2024-09-20_Port_Scan.md",
+    "Sem título 2.canvas",
+    "Sem título 1.canvas",
+    "Sem título.canvas",
+    "Campanhas/ETIC_Cybersecurity_2024-09-22_Port_Scan.md",
+    "Malwares/raspberry robin test.md",
+    "Campanhas/cobalt_2.md",
+    "Campanhas/firewall_conns.md",
+    "Campanhas/LCIA_HoneyNet_2024.md",
+    "TTPs/T1071.md",
+    "Malwares/Cobalt_Strike.md",
+    "vault.lock",
+    "IPs/IP_52.182.143.208.md",
+    "Malwares/Research part 2  CAPE Sandbox.md",
+    "Malwares/Mira Malware Drive By Compromise Google.com search engine   Microsoft  Apple.md",
+    "Malwares/Mirai - HoneyPot  Pegasus   Therahand HoneyPot Bot Network.md",
+    "Malwares/Habo Analysis System.md",
+    "Malwares/IOC Records Provided by @NextRayAI.md",
+    "Campanhas/Delete service Affects Threat Research Platforms.md",
+    "Campanhas/Cobalt Strike.md",
+    "Campanhas/ETIC Cybersecurity 2023-11-24 Port Scan.md",
+    "Campanhas/ETIC Cybersecurity 2024-02-06 Port Scan.md",
+    "IPs/IP_13.33.129.125.md",
+    "Malwares/“Broken Seal” DocuSign-themed Delivery with Fileless Process Hollowing (ZeppelinBloat-A).md",
+    "Malwares/[FileScan.io feed] Credit Skocherhan. - very interesting..md",
+    "Malwares/TTB-Chained (Tehran-Transversal Belasco Chain) - Clone of My Own Post. Updated.md",
+    "IPs/IP_162.159.134.234.md",
+    "Malwares",
+    "IPs"
+  ]
+}

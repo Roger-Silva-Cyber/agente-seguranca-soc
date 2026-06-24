@@ -1,0 +1,21 @@
+﻿---
+tags: [campanha, threat-intelligence]
+nome: More Certificates - A closer inspection of Accumulated Certs
+primeira_deteccao: 2026-05-28
+---
+
+# More Certificates - A closer inspection of Accumulated Certs
+
+## Descrição
+
+## IPs Relacionados
+- [[IPs/IP_149.154.167.41]] — [Ver no OTX](https://otx.alienvault.com/indicator/ip/149.154.167.41)
+- [[IPs/IP_13.89.178.26]] — [Ver no OTX](https://otx.alienvault.com/indicator/ip/13.89.178.26)
+
+## Malwares Utilizados
+- [[Malwares/giize ref files]]
+- [[Malwares/research part 3  CAPE Sandbox]]
+
+## TTPs Identificadas
+
+## Referências
